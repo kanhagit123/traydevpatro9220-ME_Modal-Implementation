@@ -18,7 +18,27 @@ export default function App() {
     e.preventDefault()
     const { username, email, phone, dob } = form
 
-    // Required field checks
+    // --- Format validations first (so Cypress can catch them) ---
+    if (email && !email.includes('@')) {
+      alert('Invalid email. Please check your email address.')
+      return
+    }
+
+    if (phone && !/^\d{10}$/.test(phone)) {
+      alert('Invalid phone number. Please enter a 10-digit phone number.')
+      return
+    }
+
+    if (dob) {
+      const dobDate = new Date(dob)
+      const now = new Date()
+      if (dobDate > now) {
+        alert('Invalid date of birth. Please select a valid past date.')
+        return
+      }
+    }
+
+    // --- Required field checks after ---
     if (!username) {
       alert('Please fill out the Username field.')
       return
@@ -36,27 +56,7 @@ export default function App() {
       return
     }
 
-    
-    if (!email.includes('@')) {
-      alert('Invalid email. Please check your email address.')
-      return
-    }
-
-   
-    if (!/^\d{10}$/.test(phone)) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.')
-      return
-    }
-
-    // Date of Birth validation
-    const dobDate = new Date(dob)
-    const now = new Date()
-    if (dobDate > now) {
-      alert('Invalid date of birth. Please select a valid past date.')
-      return
-    }
-
-    // If all checks pass → reset and close modal
+    // --- Success ---
     setForm({ username: '', email: '', phone: '', dob: '' })
     setIsOpen(false)
   }
