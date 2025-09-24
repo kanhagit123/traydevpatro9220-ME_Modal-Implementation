@@ -18,6 +18,7 @@ export default function App() {
     e.preventDefault()
     const { username, email, phone, dob } = form
 
+    // Required field validations
     if (!username) {
       alert('Please fill out the Username field.')
       return
@@ -35,24 +36,27 @@ export default function App() {
       return
     }
 
-    if (!email.includes('@')) {
+    // Format validations (only if filled)
+    if (email && !email.includes('@')) {
       alert('Invalid email. Please check your email address.')
       return
     }
 
-    if (!/^\d{10}$/.test(phone)) {
+    if (phone && !/^\d{10}$/.test(phone)) {
       alert('Invalid phone number. Please enter a 10-digit phone number.')
       return
     }
 
-    const dobDate = new Date(dob)
-    const now = new Date()
-    if (dobDate > now) {
-      alert('Invalid date of birth. Please select a valid past date.')
-      return
+    if (dob) {
+      const dobDate = new Date(dob)
+      const now = new Date()
+      if (dobDate > now) {
+        alert('Invalid date of birth. Please select a valid past date.')
+        return
+      }
     }
 
-    // reset form and close modal
+    // Success: reset form and close modal
     setForm({ username: '', email: '', phone: '', dob: '' })
     setIsOpen(false)
   }
